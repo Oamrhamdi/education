@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إديلو - مخطط الدراسة الذكي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8B5A2B; /* بني داكن */
+            --secondary-color: #A67C52; /* بني متوسط */
+            --accent-color: #D2B48C; /* بني فاتح */
+            --light-color: #F5F5DC; /* بيج فاتح */
+            --dark-color: #5D4037; /* بني غامق */
+            --success-color: #8BC34A;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Almarai', 'Tajawal', sans-serif;
+            background-color: #F5F5DC;
+            background-image: 
+                linear-gradient(90deg, rgba(210,180,140,0.1) 1px, transparent 1px),
+                linear-gradient(rgba(210,180,140,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            padding: 15px;
+            color: var(--dark-color);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--accent-color);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin: 15px 0 10px;
+            font-size: 1.2rem;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            border: 1px solid rgba(139, 90, 43, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 13px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 5px;
+            border: 1px solid #D2B48C;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            transition: var(--transition);
+            background-color: rgba(255, 255, 255, 0.8);
+            font-family: 'Almarai', sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.2);
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: auto;
+            margin: 5px 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        button i {
+            margin-left: 6px;
+            font-size: 12px;
+        }
+
+        .btn-secondary {
+            background-color: #A67C52;
+        }
+
+        .btn-secondary:hover {
+            background-color: #8B5A2B;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #7CB342;
+        }
+
+        .subject-input {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 3px solid var(--accent-color);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .subject-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .remove-subject {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        thead tr {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .priority-high {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .priority-medium {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .priority-low {
+            color: #6c757d;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin: 15px 0;
+            height: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: var(--danger-color);
+            background-color: rgba(244, 67, 54, 0.1);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin: 12px 0;
+            border-left: 3px solid var(--danger-color);
+            font-size: 13px;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .container, .container * {
+                visibility: visible;
+            }
+            .container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                padding: 10px;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+
+        @media (min-width: 480px) {
+            body {
+                font-size: 15px;
+            }
+            
+            .container {
+                padding: 25px;
+                max-width: 95%;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .actions {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subject-input {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 3px 10px rgba(139, 90, 43, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .fab:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px) scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <i class="fas fa-calendar-alt"></i> إديلو - مخطط الدراسة الذكي
+        </h1>
+        
+        <div class="input-section">
+            <div class="form-group">
+                <label for="numSubjects">عدد المواد الدراسية</label>
+                <input type="number" id="numSubjects" min="1" value="5" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="totalDays">المدة الزمنية المتاحة (بالأيام)</label>
+                <input type="number" id="totalDays" min="1" value="30" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="studyHours">ساعات الدراسة اليومية</label>
+                <input type="number" id="studyHours" min="1" max="24" value="4" class="form-control">
+            </div>
+            
+            <div class="actions">
+                <button id="generateFormBtn" class="btn-success">
+                    <i class="fas fa-magic"></i> إنشاء نموذج المواد
+                </button>
+            </div>
+        </div>
+        
+        <div id="subjectsForm" class="hidden">
+            <h2><i class="fas fa-book-open"></i> تفاصيل المواد الدراسية</h2>
+            <div id="subjectsContainer"></div>
+            
+            <div class="actions">
+                <button id="addSubjectBtn" class="btn-secondary">
+                    <i class="fas fa-plus"></i> إضافة مادة أخرى
+                </button>
+                <button id="generateScheduleBtn" class="btn-success">
+                    <i class="fas fa-calendar-check"></i> إنشاء جدول الدراسة
+                </button>
+            </div>
+            
+            <p id="errorMsg" class="error hidden"></p>
+        </div>
+        
+        <div id="scheduleResult" class="hidden">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">عدد المواد</div>
+                    <div class="stat-value" id="statSubjects">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">إجمالي الدروس</div>
+                    <div class="stat-value" id="statLessons">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">المدة الزمنية</div>
+                    <div class="stat-value" id="statDays">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">الدروس اليومية</div>
+                    <div class="stat-value" id="statDailyLessons">0</div>
+                </div>
+            </div>
+            
+            <div class="progress-container no-print">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+            
+            <h2><i class="fas fa-table"></i> جدول الدراسة المقترح</h2>
+            <div id="scheduleTable"></div>
+            
+            <div class="actions no-print">
+                <button id="printScheduleBtn" class="print-btn">
+                    <i class="fas fa-print"></i> طباعة الجدول
+                </button>
+                <button id="newScheduleBtn" class="btn-secondary">
+                    <i class="fas fa-redo"></i> إنشاء جدول جديد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fab no-print" id="helpFab" title="مساعدة">
+        <i class="fas fa-question"></i>
+    </div>
+
+    <script>
+        // نفس الكود السابق تماماً بدون تغيير
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const numSubjectsInput = document.getElementById('numSubjects');
+            const totalDaysInput = document.getElementById('totalDays');
+            const studyHoursInput = document.getElementById('studyHours');
+            const generateFormBtn = document.getElementById('generateFormBtn');
+            const subjectsForm = document.getElementById('subjectsForm');
+            const subjectsContainer = document.getElementById('subjectsContainer');
+            const addSubjectBtn = document.getElementById('addSubjectBtn');
+            const generateScheduleBtn = document.getElementById('generateScheduleBtn');
+            const scheduleResult = document.getElementById('scheduleResult');
+            const scheduleTable = document.getElementById('scheduleTable');
+            const errorMsg = document.getElementById('errorMsg');
+            const printScheduleBtn = document.getElementById('printScheduleBtn');
+            const newScheduleBtn = document.getElementById('newScheduleBtn');
+            const helpFab = document.getElementById('helpFab');
+            
+            // إحصائيات
+            const statSubjects = document.getElementById('statSubjects');
+            const statLessons = document.getElementById('statLessons');
+            const statDays = document.getElementById('statDays');
+            const statDailyLessons = document.getElementById('statDailyLessons');
+            const progressBar = document.getElementById('progressBar');
+            
+            let subjectCounter = 0;
+            const averageStudyHours = 4; // ساعات الدراسة الأساسية
+            
+            // إنشاء حقول إدخال لكل مادة
+            function generateSubjectInputs(count) {
+                subjectsContainer.innerHTML = '';
+                subjectCounter = 0;
+                
+                for (let i = 0; i < count; i++) {
+                    addSubjectInput();
+                }
+            }
+            
+            // إضافة حقل إدخال لمادة واحدة
+            function addSubjectInput() {
+                const subjectDiv = document.createElement('div');
+                subjectDiv.className = 'subject-input';
+                subjectDiv.id = `subject-${subjectCounter}`;
+                
+                subjectDiv.innerHTML = `
+                    <div class="subject-header">
+                        <div class="subject-title">المادة ${subjectCounter + 1}</div>
+                        <button class="remove-subject" data-id="${subjectCounter}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectName${subjectCounter}">اسم المادة:</label>
+                        <input type="text" id="subjectName${subjectCounter}" required placeholder="أدخل اسم المادة">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectLessons${subjectCounter}">عدد الدروس:</label>
+                        <input type="number" id="subjectLessons${subjectCounter}" min="1" value="10" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectDifficulty${subjectCounter}">صعوبة المادة:</label>
+                        <select id="subjectDifficulty${subjectCounter}">
+                            <option value="3">صعبة</option>
+                            <option value="2" selected>متوسطة</option>
+                            <option value="1">سهلة</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectPriority${subjectCounter}">أولوية المادة:</label>
+                        <select id="subjectPriority${subjectCounter}">
+                            <option value="3">عالية</option>
+                            <option value="2" selected>متوسطة</option>
+                            <option value="1">منخفضة</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectNotes${subjectCounter}">ملاحظات:</label>
+                        <textarea id="subjectNotes${subjectCounter}" rows="2" placeholder="أي ملاحظات إضافية عن المادة"></textarea>
+                    </div>
+                `;
+                
+                subjectsContainer.appendChild(subjectDiv);
+                subjectCounter++;
+            }
+            
+            // إنشاء نموذج المواد
+            generateFormBtn.addEventListener('click', function() {
+                const numSubjects = parseInt(numSubjectsInput.value);
+                const totalDays = parseInt(totalDaysInput.value);
+                const studyHours = parseInt(studyHoursInput.value);
+                
+                if (numSubjects < 1 || isNaN(numSubjects)) {
+                    showError("الرجاء إدخال عدد مواد صحيح أكبر من الصفر");
+                    return;
+                }
+                
+                if (totalDays < 1 || isNaN(totalDays)) {
+                    showError("الرجاء إدخال عدد أيام صحيح أكبر من الصفر");
+                    return;
+                }
+                
+                if (studyHours < 1 || studyHours > 24 || isNaN(studyHours)) {
+                    showError("الرجاء إدخال عدد ساعات دراسة صحيح بين 1 و 24");
+                    return;
+                }
+                
+                generateSubjectInputs(numSubjects);
+                subjectsForm.classList.remove('hidden');
+                scheduleResult.classList.add('hidden');
+                hideError();
+                
+                // Scroll to the subjects form
+                subjectsForm.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // إضافة مادة جديدة
+            addSubjectBtn.addEventListener('click', function() {
+                addSubjectInput();
+                
+                // Scroll to the new subject
+                document.getElementById(`subject-${subjectCounter - 1}`).scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // إزالة مادة
+            subjectsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-subject') || e.target.closest('.remove-subject')) {
+                    const subjectId = e.target.closest('.remove-subject').getAttribute('data-id');
+                    const subjectElement = document.getElementById(`subject-${subjectId}`);
+                    
+                    // Add animation before removal
+                    subjectElement.style.transform = 'translateX(100%)';
+                    subjectElement.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        subjectElement.remove();
+                        // Renumber remaining subjects
+                        const subjects = subjectsContainer.querySelectorAll('.subject-input');
+                        subjects.forEach((subject, index) => {
+                            subject.querySelector('.subject-title').textContent = `المادة ${index + 1}`;
+                        });
+                    }, 300);
+                }
+            });
+            
+            // إنشاء جدول الدراسة
+            generateScheduleBtn.addEventListener('click', function() {
+                const totalDays = parseInt(totalDaysInput.value);
+                const studyHours = parseInt(studyHoursInput.value);
+                const subjects = [];
+                let totalLessons = 0;
+                
+                // جمع بيانات المواد
+                const subjectElements = subjectsContainer.querySelectorAll('.subject-input');
+                if (subjectElements.length === 0) {
+                    showError("الرجاء إضافة مادة واحدة على الأقل");
+                    return;
+                }
+                
+                subjectElements.forEach((element, index) => {
+                    const name = document.getElementById(`subjectName${index}`).value.trim();
+                    const lessons = parseInt(document.getElementById(`subjectLessons${index}`).value);
+                    const difficulty = parseInt(document.getElementById(`subjectDifficulty${index}`).value);
+                    const priority = parseInt(document.getElementById(`subjectPriority${index}`).value);
+                    const notes = document.getElementById(`subjectNotes${index}`).value.trim();
+                    
+                    if (!name || isNaN(lessons) || lessons < 1) {
+                        showError(`الرجاء إدخال بيانات صحيحة للمادة ${index + 1}`);
+                        return;
+                    }
+                    
+                    subjects.push({
+                        id: index,
+                        name: name,
+                        lessons: lessons,
+                        difficulty: difficulty,
+                        priority: priority,
+                        notes: notes
+                    });
+                    
+                    totalLessons += lessons;
+                });
+                
+                if (totalLessons === 0) {
+                    showError("إجمالي الدروس يجب أن يكون أكبر من الصفر");
+                    return;
+                }
+                
+                // حساب عدد الدروس لكل يوم مع مراعاة ساعات الدراسة
+                const baseLessonsPerDay = Math.ceil(totalLessons / totalDays);
+                const adjustedLessonsPerDay = Math.ceil(baseLessonsPerDay * (studyHours / averageStudyHours));
+                
+                // إنشاء جدول الدراسة
+                const schedule = createSchedule(subjects, totalDays, adjustedLessonsPerDay);
+                
+                // عرض الإحصائيات
+                displayStats(subjects, totalDays, adjustedLessonsPerDay);
+                
+                // عرض الجدول
+                displaySchedule(schedule);
+                scheduleResult.classList.remove('hidden');
+                hideError();
+                
+                // Scroll to the result
+                scheduleResult.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // إنشاء جدول الدراسة
+            function createSchedule(subjects, totalDays, lessonsPerDay) {
+                // نسخ المصفوفة لتجنب التعديل على الأصلية
+                const subjectsCopy = JSON.parse(JSON.stringify(subjects));
+                
+                // حساب وزن كل مادة (يجمع بين الأولوية والصعوبة)
+                subjectsCopy.forEach(subject => {
+                    subject.weight = subject.priority * 0.7 + subject.difficulty * 0.3;
+                });
+                
+                // فرز المواد حسب الوزن (من الأعلى إلى الأقل)
+                subjectsCopy.sort((a, b) => b.weight - a.weight);
+                
+                const schedule = [];
+                let currentDay = 1;
+                
+                while (currentDay <= totalDays && subjectsCopy.some(sub => sub.lessons > 0)) {
+                    const dailyLessons = [];
+                    let remainingLessons = lessonsPerDay;
+                    
+                    // توزيع الدروس حسب الوزن
+                    for (let i = 0; i < subjectsCopy.length && remainingLessons > 0; i++) {
+                        if (subjectsCopy[i].lessons > 0) {
+                            // حساب عدد الدروس المخصصة بناء على الوزن
+                            const activeSubjects = subjectsCopy.filter(sub => sub.lessons > 0);
+                            const totalWeight = activeSubjects.reduce((sum, sub) => sum + sub.weight, 0);
+                            const weightPercentage = subjectsCopy[i].weight / totalWeight;
+                            
+                            let suggestedLessons = Math.max(1, Math.floor(lessonsPerDay * weightPercentage));
+                            const taken = Math.min(subjectsCopy[i].lessons, suggestedLessons, remainingLessons);
+                            
+                            if (taken > 0) {
+                                // البحث إذا كانت المادة موجودة بالفعل في اليوم
+                                const existingSubject = dailyLessons.find(item => item.subjectId === subjectsCopy[i].id);
+                                if (existingSubject) {
+                                    existingSubject.lessons += taken;
+                                } else {
+                                    dailyLessons.push({
+                                        subjectId: subjectsCopy[i].id,
+                                        subjectName: subjectsCopy[i].name,
+                                        lessons: taken,
+                                        priority: subjectsCopy[i].priority,
+                                        notes: subjectsCopy[i].notes
+                                    });
+                                }
+                                
+                                subjectsCopy[i].lessons -= taken;
+                                remainingLessons -= taken;
+                            }
+                        }
+                    }
+                    
+                    // إذا بقي دروس ولم يتم توزيعها بسبب الوزن، نوزعها بالتساوي
+                    if (remainingLessons > 0) {
+                        const remainingSubjects = subjectsCopy.filter(sub => sub.lessons > 0);
+                        
+                        if (remainingSubjects.length > 0) {
+                            const perSubject = Math.max(1, Math.floor(remainingLessons / remainingSubjects.length));
+                            
+                            for (let i = 0; i < remainingSubjects.length && remainingLessons > 0; i++) {
+                                const taken = Math.min(remainingSubjects[i].lessons, perSubject, remainingLessons);
+                                
+                                if (taken > 0) {
+                                    const existingSubject = dailyLessons.find(item => item.subjectId === remainingSubjects[i].id);
+                                    if (existingSubject) {
+                                        existingSubject.lessons += taken;
+                                    } else {
+                                        dailyLessons.push({
+                                            subjectId: remainingSubjects[i].id,
+                                            subjectName: remainingSubjects[i].name,
+                                            lessons: taken,
+                                            priority: remainingSubjects[i].priority,
+                                            notes: remainingSubjects[i].notes
+                                        });
+                                    }
+                                    
+                                    remainingSubjects[i].lessons -= taken;
+                                    remainingLessons -= taken;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // إذا بقي دروس بعد التوزيع بالتساوي
+                    if (remainingLessons > 0) {
+                        for (let i = 0; i < subjectsCopy.length && remainingLessons > 0; i++) {
+                            if (subjectsCopy[i].lessons > 0) {
+                                const taken = Math.min(subjectsCopy[i].lessons, remainingLessons);
+                                
+                                const existingSubject = dailyLessons.find(item => item.subjectId === subjectsCopy[i].id);
+                                if (existingSubject) {
+                                    existingSubject.lessons += taken;
+                                } else {
+                                    dailyLessons.push({
+                                        subjectId: subjectsCopy[i].id,
+                                        subjectName: subjectsCopy[i].name,
+                                        lessons: taken,
+                                        priority: subjectsCopy[i].priority,
+                                        notes: subjectsCopy[i].notes
+                                    });
+                                }
+                                
+                                subjectsCopy[i].lessons -= taken;
+                                remainingLessons -= taken;
+                            }
+                        }
+                    }
+                    
+                    schedule.push({
+                        day: currentDay,
+                        lessons: dailyLessons,
+                        totalLessons: dailyLessons.reduce((sum, lesson) => sum + lesson.lessons, 0)
+                    });
+                    
+                    currentDay++;
+                }
+                
+                return schedule;
+            }
+            
+            // عرض الإحصائيات
+            function displayStats(subjects, totalDays, lessonsPerDay) {
+                const totalLessons = subjects.reduce((sum, subject) => sum + subject.lessons, 0);
+                
+                statSubjects.textContent = subjects.length;
+                statLessons.textContent = totalLessons;
+                statDays.textContent = totalDays;
+                statDailyLessons.textContent = lessonsPerDay;
+                
+                // حساب نسبة الإنجاز
+                const totalPossibleLessons = lessonsPerDay * totalDays;
+                const progressPercentage = Math.min(100, Math.round((totalLessons / totalPossibleLessons) * 100));
+                progressBar.style.width = `${progressPercentage}%`;
+                progressBar.textContent = `${progressPercentage}%`;
+            }
+            
+            // عرض جدول الدراسة
+            function displaySchedule(schedule) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اليوم</th>
+                                <th>المواد والدروس</th>
+                                <th>إجمالي الدروس</th>
+                                <th class="no-print">ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                for (const day of schedule) {
+                    let lessonsList = '';
+                    let notesList = '';
+                    
+                    // فرز الدروس حسب الأولوية
+                    day.lessons.sort((a, b) => b.priority - a.priority);
+                    
+                    for (const lesson of day.lessons) {
+                        const priorityClass = getPriorityClass(lesson.priority);
+                        lessonsList += `
+                            <div>
+                                <span class="${priorityClass}">${lesson.subjectName}</span>
+                                (${lesson.lessons} درس)
+                            </div>
+                        `;
+                        
+                        if (lesson.notes) {
+                            notesList += `
+                                <div>
+                                    <strong>${lesson.subjectName}:</strong> ${lesson.notes}
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${day.day}</td>
+                            <td>${lessonsList || 'لا توجد دروس'}</td>
+                            <td>${day.totalLessons}</td>
+                            <td class="no-print">${notesList || 'لا توجد ملاحظات'}</td>
+                        </tr>
+                    `;
+                }
+                
+                html += `
+                        </tbody>
+                    </table>
+                `;
+                
+                scheduleTable.innerHTML = html;
+            }
+            
+            // الحصول على كلاس الأولوية
+            function getPriorityClass(priority) {
+                switch(priority) {
+                    case 3: return 'priority-high';
+                    case 2: return 'priority-medium';
+                    case 1: return 'priority-low';
+                    default: return '';
+                }
+            }
+            
+            // طباعة الجدول
+            printScheduleBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // إنشاء جدول جديد
+            newScheduleBtn.addEventListener('click', function() {
+                scheduleResult.classList.add('hidden');
+                subjectsForm.classList.remove('hidden');
+                subjectsContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // زر المساعدة
+            helpFab.addEventListener('click', function() {
+                alert(`إديلو - مساعدة\n\n1. أدخل عدد المواد والمدة الزمنية وساعات الدراسة اليومية\n2. اضغط على "إنشاء نموذج المواد"\n3. املأ تفاصيل كل مادة (الاسم، عدد الدروس، الصعوبة، الأولوية)\n4. اضغط على "إنشاء جدول الدراسة" للحصول على جدولك الدراسي\n\nيمكنك إضافة أو إزالة مواد حسب الحاجة`);
+            });
+            
+            // عرض خطأ
+            function showError(message) {
+                errorMsg.textContent = message;
+                errorMsg.classList.remove('hidden');
+                errorMsg.scrollIntoView({ behavior: 'smooth' });
+                
+                // إزالة الخطأ بعد 5 ثواني
+                setTimeout(hideError, 5000);
+            }
+            
+            function hideError() {
+                errorMsg.textContent = '';
+                errorMsg.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
