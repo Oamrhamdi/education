@@ -6,13 +6,15 @@
     <title>إديلو - مخطط الدراسة الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary-color: #8B5A2B; /* بني داكن */
-            --secondary-color: #A67C52; /* بني متوسط */
-            --accent-color: #D2B48C; /* بني فاتح */
-            --light-color: #F5F5DC; /* بيج فاتح */
-            --dark-color: #5D4037; /* بني غامق */
+            --primary-color: #8B5A2B;
+            --secondary-color: #A67C52;
+            --accent-color: #D2B48C;
+            --light-color: #F5F5DC;
+            --dark-color: #5D4037;
             --success-color: #8BC34A;
             --warning-color: #FFC107;
             --danger-color: #F44336;
@@ -154,6 +156,12 @@
             transform: translateY(-2px);
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
         button i {
             margin-left: 6px;
             font-size: 12px;
@@ -173,6 +181,14 @@
 
         .btn-success:hover {
             background-color: #7CB342;
+        }
+
+        .btn-pdf {
+            background-color: #F44336;
+        }
+
+        .btn-pdf:hover {
+            background-color: #D32F2F;
         }
 
         .subject-input {
@@ -214,6 +230,11 @@
             font-size: 12px;
         }
 
+        .remove-subject:hover {
+            background-color: #d3166b;
+            transform: rotate(90deg);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -243,6 +264,10 @@
 
         tbody tr:nth-child(even) {
             background-color: #f8f9fa;
+        }
+
+        tbody tr:last-of-type {
+            border-bottom: 2px solid var(--primary-color);
         }
 
         .priority-high {
@@ -321,6 +346,12 @@
             margin: 12px 0;
             border-left: 3px solid var(--danger-color);
             font-size: 13px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .actions {
@@ -328,6 +359,83 @@
             flex-direction: column;
             gap: 8px;
             margin-top: 15px;
+        }
+
+        .daily-view {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--accent-color);
+        }
+
+        .daily-view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        .day-navigation {
+            display: flex;
+            gap: 10px;
+        }
+
+        .day-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .daily-lessons {
+            margin-top: 10px;
+        }
+
+        .daily-lesson {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .lesson-priority {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .lesson-notes {
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px dashed #ddd;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 3px 10px rgba(139, 90, 43, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .fab:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px) scale(1.05);
         }
 
         @media print {
@@ -384,30 +492,6 @@
         .subject-input {
             animation: slideIn 0.3s ease forwards;
         }
-
-        .fab {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 3px 10px rgba(139, 90, 43, 0.3);
-            cursor: pointer;
-            transition: var(--transition);
-            z-index: 100;
-        }
-
-        .fab:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px) scale(1.05);
-        }
     </style>
 </head>
 <body>
@@ -430,6 +514,16 @@
             <div class="form-group">
                 <label for="studyHours">ساعات الدراسة اليومية</label>
                 <input type="number" id="studyHours" min="1" max="24" value="4" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="maxDailyLessons">الحد الأقصى للدروس يومياً (اختياري)</label>
+                <input type="number" id="maxDailyLessons" min="1" class="form-control" placeholder="اتركه فارغاً للا محدود">
+            </div>
+            
+            <div class="form-group">
+                <label for="maxDailySubjects">الحد الأقصى للمواد يومياً (اختياري)</label>
+                <input type="number" id="maxDailySubjects" min="1" class="form-control" placeholder="اتركه فارغاً للا محدود">
             </div>
             
             <div class="actions">
@@ -478,13 +572,29 @@
             <div class="progress-container no-print">
                 <div class="progress-bar" id="progressBar">0%</div>
             </div>
+
+            <div class="daily-view no-print">
+                <div class="daily-view-header">
+                    <button id="prevDayBtn" class="btn-secondary">
+                        <i class="fas fa-chevron-right"></i> اليوم السابق
+                    </button>
+                    <div class="day-title" id="currentDayTitle">اليوم 1</div>
+                    <button id="nextDayBtn" class="btn-secondary">
+                        اليوم التالي <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                <div id="dailyLessonsContainer"></div>
+            </div>
             
             <h2><i class="fas fa-table"></i> جدول الدراسة المقترح</h2>
             <div id="scheduleTable"></div>
             
             <div class="actions no-print">
-                <button id="printScheduleBtn" class="print-btn">
+                <button id="printScheduleBtn" class="btn-secondary">
                     <i class="fas fa-print"></i> طباعة الجدول
+                </button>
+                <button id="downloadPdfBtn" class="btn-pdf">
+                    <i class="fas fa-file-pdf"></i> تنزيل PDF
                 </button>
                 <button id="newScheduleBtn" class="btn-secondary">
                     <i class="fas fa-redo"></i> إنشاء جدول جديد
@@ -498,12 +608,13 @@
     </div>
 
     <script>
-        // نفس الكود السابق تماماً بدون تغيير
         document.addEventListener('DOMContentLoaded', function() {
             // عناصر DOM
             const numSubjectsInput = document.getElementById('numSubjects');
             const totalDaysInput = document.getElementById('totalDays');
             const studyHoursInput = document.getElementById('studyHours');
+            const maxDailyLessonsInput = document.getElementById('maxDailyLessons');
+            const maxDailySubjectsInput = document.getElementById('maxDailySubjects');
             const generateFormBtn = document.getElementById('generateFormBtn');
             const subjectsForm = document.getElementById('subjectsForm');
             const subjectsContainer = document.getElementById('subjectsContainer');
@@ -515,6 +626,11 @@
             const printScheduleBtn = document.getElementById('printScheduleBtn');
             const newScheduleBtn = document.getElementById('newScheduleBtn');
             const helpFab = document.getElementById('helpFab');
+            const prevDayBtn = document.getElementById('prevDayBtn');
+            const nextDayBtn = document.getElementById('nextDayBtn');
+            const currentDayTitle = document.getElementById('currentDayTitle');
+            const dailyLessonsContainer = document.getElementById('dailyLessonsContainer');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
             
             // إحصائيات
             const statSubjects = document.getElementById('statSubjects');
@@ -524,8 +640,10 @@
             const progressBar = document.getElementById('progressBar');
             
             let subjectCounter = 0;
-            const averageStudyHours = 4; // ساعات الدراسة الأساسية
-            
+            const averageStudyHours = 4;
+            let currentSchedule = [];
+            let currentDayIndex = 0;
+
             // إنشاء حقول إدخال لكل مادة
             function generateSubjectInputs(count) {
                 subjectsContainer.innerHTML = '';
@@ -614,15 +732,12 @@
                 scheduleResult.classList.add('hidden');
                 hideError();
                 
-                // Scroll to the subjects form
                 subjectsForm.scrollIntoView({ behavior: 'smooth' });
             });
             
             // إضافة مادة جديدة
             addSubjectBtn.addEventListener('click', function() {
                 addSubjectInput();
-                
-                // Scroll to the new subject
                 document.getElementById(`subject-${subjectCounter - 1}`).scrollIntoView({ behavior: 'smooth' });
             });
             
@@ -632,13 +747,11 @@
                     const subjectId = e.target.closest('.remove-subject').getAttribute('data-id');
                     const subjectElement = document.getElementById(`subject-${subjectId}`);
                     
-                    // Add animation before removal
                     subjectElement.style.transform = 'translateX(100%)';
                     subjectElement.style.opacity = '0';
                     
                     setTimeout(() => {
                         subjectElement.remove();
-                        // Renumber remaining subjects
                         const subjects = subjectsContainer.querySelectorAll('.subject-input');
                         subjects.forEach((subject, index) => {
                             subject.querySelector('.subject-title').textContent = `المادة ${index + 1}`;
@@ -651,10 +764,11 @@
             generateScheduleBtn.addEventListener('click', function() {
                 const totalDays = parseInt(totalDaysInput.value);
                 const studyHours = parseInt(studyHoursInput.value);
+                const maxDailyLessons = maxDailyLessonsInput.value ? parseInt(maxDailyLessonsInput.value) : null;
+                const maxDailySubjects = maxDailySubjectsInput.value ? parseInt(maxDailySubjectsInput.value) : null;
                 const subjects = [];
                 let totalLessons = 0;
                 
-                // جمع بيانات المواد
                 const subjectElements = subjectsContainer.querySelectorAll('.subject-input');
                 if (subjectElements.length === 0) {
                     showError("الرجاء إضافة مادة واحدة على الأقل");
@@ -690,36 +804,27 @@
                     return;
                 }
                 
-                // حساب عدد الدروس لكل يوم مع مراعاة ساعات الدراسة
                 const baseLessonsPerDay = Math.ceil(totalLessons / totalDays);
                 const adjustedLessonsPerDay = Math.ceil(baseLessonsPerDay * (studyHours / averageStudyHours));
                 
-                // إنشاء جدول الدراسة
-                const schedule = createSchedule(subjects, totalDays, adjustedLessonsPerDay);
+                const schedule = createSchedule(subjects, totalDays, adjustedLessonsPerDay, maxDailyLessons, maxDailySubjects);
                 
-                // عرض الإحصائيات
                 displayStats(subjects, totalDays, adjustedLessonsPerDay);
-                
-                // عرض الجدول
                 displaySchedule(schedule);
                 scheduleResult.classList.remove('hidden');
                 hideError();
                 
-                // Scroll to the result
                 scheduleResult.scrollIntoView({ behavior: 'smooth' });
             });
             
             // إنشاء جدول الدراسة
-            function createSchedule(subjects, totalDays, lessonsPerDay) {
-                // نسخ المصفوفة لتجنب التعديل على الأصلية
+            function createSchedule(subjects, totalDays, lessonsPerDay, maxDailyLessons, maxDailySubjects) {
                 const subjectsCopy = JSON.parse(JSON.stringify(subjects));
                 
-                // حساب وزن كل مادة (يجمع بين الأولوية والصعوبة)
                 subjectsCopy.forEach(subject => {
                     subject.weight = subject.priority * 0.7 + subject.difficulty * 0.3;
                 });
                 
-                // فرز المواد حسب الوزن (من الأعلى إلى الأقل)
                 subjectsCopy.sort((a, b) => b.weight - a.weight);
                 
                 const schedule = [];
@@ -727,21 +832,25 @@
                 
                 while (currentDay <= totalDays && subjectsCopy.some(sub => sub.lessons > 0)) {
                     const dailyLessons = [];
-                    let remainingLessons = lessonsPerDay;
+                    let remainingLessons = maxDailyLessons ? Math.min(lessonsPerDay, maxDailyLessons) : lessonsPerDay;
+                    let remainingSubjects = maxDailySubjects || Infinity;
                     
-                    // توزيع الدروس حسب الوزن
-                    for (let i = 0; i < subjectsCopy.length && remainingLessons > 0; i++) {
+                    // توزيع الدروس حسب الوزن مع مراعاة الحدود الجديدة
+                    for (let i = 0; i < subjectsCopy.length && remainingLessons > 0 && remainingSubjects > 0; i++) {
                         if (subjectsCopy[i].lessons > 0) {
-                            // حساب عدد الدروس المخصصة بناء على الوزن
                             const activeSubjects = subjectsCopy.filter(sub => sub.lessons > 0);
                             const totalWeight = activeSubjects.reduce((sum, sub) => sum + sub.weight, 0);
                             const weightPercentage = subjectsCopy[i].weight / totalWeight;
                             
                             let suggestedLessons = Math.max(1, Math.floor(lessonsPerDay * weightPercentage));
-                            const taken = Math.min(subjectsCopy[i].lessons, suggestedLessons, remainingLessons);
+                            let taken = Math.min(subjectsCopy[i].lessons, suggestedLessons, remainingLessons);
+                            
+                            // التأكد من عدم تجاوز الحد الأقصى للمواد
+                            if (dailyLessons.length >= remainingSubjects) {
+                                taken = 0;
+                            }
                             
                             if (taken > 0) {
-                                // البحث إذا كانت المادة موجودة بالفعل في اليوم
                                 const existingSubject = dailyLessons.find(item => item.subjectId === subjectsCopy[i].id);
                                 if (existingSubject) {
                                     existingSubject.lessons += taken;
@@ -753,6 +862,7 @@
                                         priority: subjectsCopy[i].priority,
                                         notes: subjectsCopy[i].notes
                                     });
+                                    remainingSubjects--;
                                 }
                                 
                                 subjectsCopy[i].lessons -= taken;
@@ -762,30 +872,31 @@
                     }
                     
                     // إذا بقي دروس ولم يتم توزيعها بسبب الوزن، نوزعها بالتساوي
-                    if (remainingLessons > 0) {
-                        const remainingSubjects = subjectsCopy.filter(sub => sub.lessons > 0);
+                    if (remainingLessons > 0 && remainingSubjects > 0) {
+                        const remainingSubjectsList = subjectsCopy.filter(sub => sub.lessons > 0);
                         
-                        if (remainingSubjects.length > 0) {
-                            const perSubject = Math.max(1, Math.floor(remainingLessons / remainingSubjects.length));
+                        if (remainingSubjectsList.length > 0) {
+                            const perSubject = Math.max(1, Math.floor(remainingLessons / remainingSubjectsList.length));
                             
-                            for (let i = 0; i < remainingSubjects.length && remainingLessons > 0; i++) {
-                                const taken = Math.min(remainingSubjects[i].lessons, perSubject, remainingLessons);
+                            for (let i = 0; i < remainingSubjectsList.length && remainingLessons > 0 && remainingSubjects > 0; i++) {
+                                const taken = Math.min(remainingSubjectsList[i].lessons, perSubject, remainingLessons);
                                 
                                 if (taken > 0) {
-                                    const existingSubject = dailyLessons.find(item => item.subjectId === remainingSubjects[i].id);
+                                    const existingSubject = dailyLessons.find(item => item.subjectId === remainingSubjectsList[i].id);
                                     if (existingSubject) {
                                         existingSubject.lessons += taken;
                                     } else {
                                         dailyLessons.push({
-                                            subjectId: remainingSubjects[i].id,
-                                            subjectName: remainingSubjects[i].name,
+                                            subjectId: remainingSubjectsList[i].id,
+                                            subjectName: remainingSubjectsList[i].name,
                                             lessons: taken,
-                                            priority: remainingSubjects[i].priority,
-                                            notes: remainingSubjects[i].notes
+                                            priority: remainingSubjectsList[i].priority,
+                                            notes: remainingSubjectsList[i].notes
                                         });
+                                        remainingSubjects--;
                                     }
                                     
-                                    remainingSubjects[i].lessons -= taken;
+                                    remainingSubjectsList[i].lessons -= taken;
                                     remainingLessons -= taken;
                                 }
                             }
@@ -793,8 +904,8 @@
                     }
                     
                     // إذا بقي دروس بعد التوزيع بالتساوي
-                    if (remainingLessons > 0) {
-                        for (let i = 0; i < subjectsCopy.length && remainingLessons > 0; i++) {
+                    if (remainingLessons > 0 && remainingSubjects > 0) {
+                        for (let i = 0; i < subjectsCopy.length && remainingLessons > 0 && remainingSubjects > 0; i++) {
                             if (subjectsCopy[i].lessons > 0) {
                                 const taken = Math.min(subjectsCopy[i].lessons, remainingLessons);
                                 
@@ -809,6 +920,7 @@
                                         priority: subjectsCopy[i].priority,
                                         notes: subjectsCopy[i].notes
                                     });
+                                    remainingSubjects--;
                                 }
                                 
                                 subjectsCopy[i].lessons -= taken;
@@ -820,7 +932,8 @@
                     schedule.push({
                         day: currentDay,
                         lessons: dailyLessons,
-                        totalLessons: dailyLessons.reduce((sum, lesson) => sum + lesson.lessons, 0)
+                        totalLessons: dailyLessons.reduce((sum, lesson) => sum + lesson.lessons, 0),
+                        totalSubjects: dailyLessons.length
                     });
                     
                     currentDay++;
@@ -838,7 +951,6 @@
                 statDays.textContent = totalDays;
                 statDailyLessons.textContent = lessonsPerDay;
                 
-                // حساب نسبة الإنجاز
                 const totalPossibleLessons = lessonsPerDay * totalDays;
                 const progressPercentage = Math.min(100, Math.round((totalLessons / totalPossibleLessons) * 100));
                 progressBar.style.width = `${progressPercentage}%`;
@@ -847,6 +959,9 @@
             
             // عرض جدول الدراسة
             function displaySchedule(schedule) {
+                currentSchedule = schedule;
+                currentDayIndex = 0;
+                
                 let html = `
                     <table>
                         <thead>
@@ -854,6 +969,7 @@
                                 <th>اليوم</th>
                                 <th>المواد والدروس</th>
                                 <th>إجمالي الدروس</th>
+                                <th>عدد المواد</th>
                                 <th class="no-print">ملاحظات</th>
                             </tr>
                         </thead>
@@ -864,7 +980,6 @@
                     let lessonsList = '';
                     let notesList = '';
                     
-                    // فرز الدروس حسب الأولوية
                     day.lessons.sort((a, b) => b.priority - a.priority);
                     
                     for (const lesson of day.lessons) {
@@ -890,6 +1005,7 @@
                             <td>${day.day}</td>
                             <td>${lessonsList || 'لا توجد دروس'}</td>
                             <td>${day.totalLessons}</td>
+                            <td>${day.totalSubjects}</td>
                             <td class="no-print">${notesList || 'لا توجد ملاحظات'}</td>
                         </tr>
                     `;
@@ -901,6 +1017,47 @@
                 `;
                 
                 scheduleTable.innerHTML = html;
+                
+                showDay(0);
+            }
+            
+            // عرض يوم معين
+            function showDay(dayIndex) {
+                if (currentSchedule.length === 0 || dayIndex < 0 || dayIndex >= currentSchedule.length) return;
+                
+                const day = currentSchedule[dayIndex];
+                currentDayIndex = dayIndex;
+                
+                currentDayTitle.textContent = `اليوم ${day.day}`;
+                
+                prevDayBtn.disabled = dayIndex === 0;
+                nextDayBtn.disabled = dayIndex === currentSchedule.length - 1;
+                
+                let html = '';
+                
+                if (day.lessons.length === 0) {
+                    html = '<div class="daily-lesson">لا توجد دروس لهذا اليوم</div>';
+                } else {
+                    day.lessons.sort((a, b) => b.priority - a.priority);
+                    
+                    for (const lesson of day.lessons) {
+                        const priorityClass = getPriorityClass(lesson.priority);
+                        const priorityText = getPriorityText(lesson.priority);
+                        
+                        html += `
+                            <div class="daily-lesson">
+                                <div>
+                                    <strong>${lesson.subjectName}</strong>
+                                    <span class="lesson-priority ${priorityClass}">(${priorityText})</span>
+                                    <span> - ${lesson.lessons} درس</span>
+                                </div>
+                                ${lesson.notes ? `<div class="lesson-notes">${lesson.notes}</div>` : ''}
+                            </div>
+                        `;
+                    }
+                }
+                
+                dailyLessonsContainer.innerHTML = html;
             }
             
             // الحصول على كلاس الأولوية
@@ -913,10 +1070,115 @@
                 }
             }
             
+            // الحصول على نص الأولوية
+            function getPriorityText(priority) {
+                switch(priority) {
+                    case 3: return 'أولوية عالية';
+                    case 2: return 'أولوية متوسطة';
+                    case 1: return 'أولوية منخفضة';
+                    default: return '';
+                }
+            }
+            
+            // التنقل بين الأيام
+            prevDayBtn.addEventListener('click', function() {
+                if (currentDayIndex > 0) {
+                    showDay(currentDayIndex - 1);
+                }
+            });
+            
+            nextDayBtn.addEventListener('click', function() {
+                if (currentDayIndex < currentSchedule.length - 1) {
+                    showDay(currentDayIndex + 1);
+                }
+            });
+            
             // طباعة الجدول
             printScheduleBtn.addEventListener('click', function() {
                 window.print();
             });
+            
+            // تنزيل الجدول كـ PDF
+            downloadPdfBtn.addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'pt', 'a4');
+                
+                doc.setFont('Helvetica', 'bold');
+                doc.setFontSize(18);
+                doc.text('جدول الدراسة - إديلو', 40, 40);
+                
+                doc.setFont('Helvetica', 'normal');
+                doc.setFontSize(12);
+                const today = new Date();
+                doc.text(`تاريخ الإنشاء: ${today.toLocaleDateString('ar-EG')}`, 40, 60);
+                
+                doc.setFontSize(14);
+                doc.text(`عدد المواد: ${statSubjects.textContent}`, 40, 90);
+                doc.text(`إجمالي الدروس: ${statLessons.textContent}`, 40, 110);
+                doc.text(`المدة الزمنية: ${statDays.textContent} يوم`, 40, 130);
+                doc.text(`الدروس اليومية: ${statDailyLessons.textContent}`, 40, 150);
+                
+                let y = 180;
+                doc.setFontSize(12);
+                doc.setFont('Helvetica', 'bold');
+                doc.text('اليوم', 40, y);
+                doc.text('المواد والدروس', 100, y);
+                doc.text('عدد الدروس', 400, y);
+                doc.text('عدد المواد', 450, y);
+                y += 20;
+                
+                doc.setFont('Helvetica', 'normal');
+                doc.setFontSize(10);
+                
+                for (const day of currentSchedule) {
+                    doc.setFillColor(210, 180, 140);
+                    doc.rect(40, y-10, 500, 15, 'F');
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFont('Helvetica', 'bold');
+                    doc.text(`اليوم ${day.day}`, 45, y);
+                    y += 20;
+                    
+                    doc.setFont('Helvetica', 'normal');
+                    for (const lesson of day.lessons) {
+                        const priorityColor = getPriorityColor(lesson.priority);
+                        
+                        doc.setTextColor(priorityColor.r, priorityColor.g, priorityColor.b);
+                        doc.text(lesson.subjectName, 100, y);
+                        doc.text(lesson.lessons.toString(), 400, y);
+                        doc.text(day.totalSubjects.toString(), 450, y);
+                        
+                        if (lesson.notes) {
+                            doc.setTextColor(100, 100, 100);
+                            doc.setFontSize(8);
+                            doc.text(`ملاحظات: ${lesson.notes}`, 100, y + 15);
+                            doc.setFontSize(10);
+                            y += 15;
+                        }
+                        
+                        y += 20;
+                        
+                        if (y > 700) {
+                            doc.addPage();
+                            y = 40;
+                        }
+                    }
+                    
+                    doc.setTextColor(0, 0, 0);
+                    y += 10;
+                }
+                
+                doc.save('جدول_الدراسة_إديلو.pdf');
+            });
+            
+            // الحصول على لون الأولوية لـ PDF
+            function getPriorityColor(priority) {
+                switch(priority) {
+                    case 3: return {r: 244, g: 67, b: 54};
+                    case 2: return {r: 255, g: 193, b: 7};
+                    case 1: return {r: 108, g: 117, b: 125};
+                    default: return {r: 0, g: 0, b: 0};
+                }
+            }
             
             // إنشاء جدول جديد
             newScheduleBtn.addEventListener('click', function() {
@@ -936,7 +1198,6 @@
                 errorMsg.classList.remove('hidden');
                 errorMsg.scrollIntoView({ behavior: 'smooth' });
                 
-                // إزالة الخطأ بعد 5 ثواني
                 setTimeout(hideError, 5000);
             }
             
